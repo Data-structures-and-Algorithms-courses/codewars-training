@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script type="text/javascript">
+      // Works fine, but takes too long.
+      // Actually, this one finds all the matches.
+      // We may return false if we find one dismatch.
+      function validParentheses(parens) {
+        const arr = parens.split("");
+        // arr.forEach((elem) => console.log(elem));
+        console.log(" length", arr.length);
+        if (arr.length % 2 !== 0 || !arr.length) return false;
+        if (arr[0] === ")" || arr[arr.length - 1] === "(") return false;
+
+        let left = 0,
+          right = 1,
+          counter = 0;
+        while (left < arr.length - 1) {
+          for (let i = 0; i < arr.length; i++) {
+            console.log("out", arr[left], arr[right]);
+            if (arr[left].concat(arr[right]) === "()") {
+              console.log("in", left, right);
+              console.log("true", arr[left], arr[right], right - left);
+              counter += 2;
+              if (right - left === 1) left += 2;
+              else left++;
+              right = left + 1;
+              console.log("in2", left, right);
+            } else {
+              console.log("else", left, right);
+
+              right++;
+            }
+            // console.log(arr);
+            if (right === arr.length - 1) {
+              if (arr[left].concat(arr[right]) === "()") {
+                counter += 2;
+                return arr.length === counter;
+              } else {
+                left++;
+                right = left + 1;
+              }
+            }
+            console.log("counter", counter);
+            console.log("bottom", left, right);
+            console.log("bottom", arr.length - 2, arr.length - 1);
+            // if (left === arr.length - 2 && right === arr.length - 1) {
+            //   if (arr[left].concat(arr[right]) === "()") {
+            //     counter += 2;
+            //     return arr.length === counter;
+            //   }
+            // } else break;
+            if (left >= arr.length - 2) break;
+          }
+        }
+        console.log(counter, arr.length);
+        return arr.length === counter;
+      }
+
+      // Again good but not fast enough
+      function validParentheses1(parens) {
+        const arr = parens.split("");
+
+        let left = 0,
+          right = 1;
+        while (left < arr.length - 1) {
+          for (let i = 0; i < arr.length; i++) {
+            // If we have a match
+            if (arr[left].concat(arr[right]) === "()") {
+              arr.splice(left, 1, "true");
+              arr.splice(right, 1, "true");
+              // If the match was one after the other increment left by 2, else by 1.
+              if (right - left === 1) left += 2;
+              else left++;
+              // Set the right to next from left.
+              right = left + 1;
+              // If no match increment right to check the next one.
+            } else {
+              right++;
+            }
+
+            // If right is at the end of the array
+            if (right === arr.length - 1) {
+              // Check if the left is also at its the end
+              if (left === arr.length - 2) {
+                // Then check if the last two form a match and return
+                if (arr[left].concat(arr[right]) === "()") {
+                  console.log(arr, left, right);
+                  arr.splice(left, 1, "true");
+                  arr.splice(right, 1, "true");
+                  return arr.every((elem) => elem === "true");
+                }
+                // If left is not at its end increment it and incremet right to one more.
+              } else {
+                left++;
+                right = left + 1;
+              }
+            }
+
+            if (left >= arr.length - 2) break;
+          }
+        }
+        console.log(arr);
+        return arr.every((elem) => elem === "true");
+      }
+
+      function validParentheses2(parens) {
+        const arr = parens.split("");
+
+        let match = false,
+          left = 0,
+          right = 1;
+        counter = 2;
+        while (left < arr.length - 1) {
+          for (let i = 0; i < arr.length; i++) {
+            // If we have a match
+            if (arr[left].concat(arr[right]) === "()") {
+              match = true;
+              counter += 2;
+              // arr.splice(left, 1, "true");
+              // arr.splice(right, 1, "true");
+
+              // If the match was one after the other increment left by 2, else by 1.
+              if (right - left === 1) left += 2;
+              else left++;
+              // Set the right to next from left.
+              right = left + 1;
+              // If no match increment right to check the next one.
+            } else {
+              match = false;
+              right++;
+            }
+
+            // If right is at the end of the array
+            if (right === arr.length - 1) {
+              // If we are at the end of the array
+              // and on the last loop we did not have a match.
+              // It means ther is a parenthesis without a match.
+              if (!match && right > 1) return false;
+              // Check if the left is also at its the end
+              if (left === arr.length - 2) {
+                // Then check if the last two form a match and return
+                if (arr[left].concat(arr[right]) === "()") {
+                  console.log(arr, left, right);
+                  // arr.splice(left, 1, "true");
+                  // arr.splice(right, 1, "true");
+                  // return arr.every((elem) => elem === "true");
+                  counter += 2;
+                  return arr.length === counter;
+                }
+                // If left is not at its end increment it and incremet right to one more.
+              } else {
+                left++;
+                right = left + 1;
+              }
+            }
+            console.log(arr, left, right);
+
+            if (left >= arr.length - 2) break;
+          }
+        }
+        console.log(arr);
+        // return arr.every((elem) => elem === "true");
+        return arr.length === counter;
+      }
+
+      function validParentheses3(parens) {
+        const arr = parens.split("");
+        if (arr.length % 2 !== 0 || !arr.length) return false;
+        if (arr[0] === ")" || arr[arr.length - 1] === "(") return false;
+        let match = false,
+          left = 0,
+          right = 1;
+        counter = 0;
+
+        while (left < arr.length - 1) {
+          for (let i = 0; i < arr.length; i++) {
+            // If we have a match
+            console.log(
+              "out",
+              arr[left] === "(" && arr[right] === ")",
+              left,
+              right
+            );
+
+            if (arr[left] === "(" && arr[right] === ")") {
+              match = true;
+              counter += 2;
+              if (right === arr.length - 1 || counter === arr.length)
+                return true;
+              // If the match was one after the other increment left by 2, else by 1.
+              if (right - left === 1) left += 2;
+              else left++;
+              // Set the right to next from left.
+              right = left + 1;
+              // If no match increment right to check the next one.
+            } else {
+              match = false;
+              right++;
+            }
+
+            // If right is at the end of the array
+            if (right === arr.length - 1) {
+              // If we are at the end of the array
+              // and on the last loop we did not have a match.
+              // It means ther is a parenthesis without a match.
+              console.log("!match", !match && right > 1);
+              if (!match && right > 1) return false;
+              // Check if the left is also at its the end
+              if (left === arr.length - 2) {
+                // Then check if the last two form a match and return
+                if (arr[left] === "(" && arr[right] === ")") {
+                  counter += 2;
+                  return arr.length === counter;
+                }
+                // If left is not at its end increment it and incremet right to one more.
+              } else {
+                left++;
+                right = left + 1;
+              }
+            }
+            console.log("l, r,", left, right);
+
+            if (left >= arr.length - 2) break;
+          }
+        }
+        console.log(arr);
+        // return arr.every((elem) => elem === "true");
+        return arr.length === counter;
+      }
+
+      function validParentheses5(parens) {
+        if (parens.length % 2 !== 0 || !parens.length) return false;
+        if (parens[0] === ")" || parens[parens.length - 1] === "(")
+          return false;
+        let match = false,
+          left = 0,
+          right = 1;
+        counter = 0;
+
+        while (left < parens.length - 1) {
+          for (let i = 0; i < parens.length; i++) {
+            // If we have a match
+            console.log(
+              "out",
+              parens[left] === "(" && parens[right] === ")",
+              left,
+              right
+            );
+
+            if (parens[left] === "(" && parens[right] === ")") {
+              match = true;
+              counter += 2;
+              if (right === parens.length - 1 || counter === parens.length)
+                return true;
+              // If the match was one after the other increment left by 2, else by 1.
+              if (right - left === 1) left += 2;
+              else left++;
+              // Set the right to next from left.
+              right = left + 1;
+              // If no match increment right to check the next one.
+            } else {
+              match = false;
+              right++;
+            }
+
+            // If right is at the end of the parensay
+            if (right === parens.length - 1) {
+              // If we are at the end of the parensay
+              // and on the last loop we did not have a match.
+              // It means ther is a parenthesis without a match.
+              console.log("!match", !match && right > 1);
+              if (!match && right > 1) return false;
+              // Check if the left is also at its the end
+              if (left === parens.length - 2) {
+                // Then check if the last two form a match and return
+                if (parens[left] === "(" && parens[right] === ")") {
+                  counter += 2;
+                  return parens.length === counter;
+                }
+                // If left is not at its end increment it and incremet right to one more.
+              } else {
+                left++;
+                right = left + 1;
+              }
+            }
+            console.log("l, r,", left, right);
+
+            if (left >= parens.length - 2) break;
+          }
+        }
+        console.log(parens);
+        // return parens.every((elem) => elem === "true");
+        return parens.length === counter;
+      }
+
+      function validParentheses6(parens) {
+        let result = 0;
+        for (let i = 0; i < parens.length; i++) {
+          result += parens[i].charCodeAt(0);
+        }
+        console.log((result / 81) % 1 === 0);
+        return (result / 81) % 1 === 0;
+      }
+
+      /*  Good Job! You may take your time to refactor/comment your solution. Submit when ready. */
+      function validParentheses7(parens) {
+        const arr = [...parens];
+        console.log("---", arr, arr.length);
+
+        let match = false,
+          left = arr.length - 2,
+          right = arr.length - 1;
+
+        function helper(arr) {
+          if (arr.length % 2 !== 0 || !arr.length) return false;
+          if (arr[0] === ")" || arr[arr.length - 1] === "(") return false;
+
+          for (let i = arr.length; i > 0; i--) {
+            console.log("-- for rl", arr, left, right);
+
+            if (arr.length <= 1 || left < 0) return;
+            if (arr[left] === "(" && arr[right] === ")") {
+              match = true;
+
+              arr.splice(right, 1);
+              arr.splice(left, 1);
+
+              console.log("--IN", arr, left, right);
+
+              left = arr.length - 2;
+              right = arr.length - 1;
+              helper(arr);
+
+              if (arr.length <= 1 || left < 0) return;
+            } else {
+              match = false;
+              left--;
+              console.log("-- else rl", arr, left, right);
+            }
+          }
+
+          helper(arr);
+        }
+
+        helper(arr);
+
+        console.log(arr);
+        return arr.length === 0;
+      }
+
+      // The above refactored
+      function validParentheses8(parens) {
+        /* Using recursion and a for-loop
+        check if you have a match starting from the last two items,
+        (because it's cheaper to delete items from the end).
+        If you have a match delete them and call the function again.
+        If not decrement the left pointer by one.
+        Repeat... 
+        If you cannot delete all the elements, 
+        that means there is a mismatch.
+        So at the end return arr.length === 0 */
+        const arr = [...parens];
+
+        let left = arr.length - 2,
+          right = arr.length - 1;
+
+        // If array is exhausted
+        if (arr.length <= 1) return arr.length === 0;
+
+        // Edge cases
+        if (arr.length % 2 !== 0 || !arr.length) return false;
+        if (arr[0] === ")" || arr[arr.length - 1] === "(") return false;
+
+        for (let i = arr.length; i > 0; i--) {
+          // If we have a match
+          if (arr[left] === "(" && arr[right] === ")") {
+            // Delete items
+            arr.splice(right, 1);
+            arr.splice(left, 1);
+
+            // Recall function with new array...
+            return validParentheses8(arr);
+          } else {
+            left--;
+          }
+        }
+        return validParentheses8(arr);
+      }
+
+      // The above without comments
+      const t0 = performance.now();
+      function validParentheses9(parens) {
+        const arr = [...parens];
+
+        let left = arr.length - 2,
+          right = arr.length - 1;
+        if (arr.length <= 1) return arr.length === 0;
+        if (arr.length % 2 !== 0 || !arr.length) return false;
+        if (arr[0] === ")" || arr[arr.length - 1] === "(") return false;
+
+        for (let i = arr.length; i > 0; i--) {
+          if (arr[left] === "(" && arr[right] === ")") {
+            arr.splice(right, 1);
+            arr.splice(left, 1);
+            return validParentheses9(arr);
+          } else {
+            left--;
+          }
+        }
+
+        return validParentheses9(arr);
+      }
+
+      // ())(()
+      // (()()()())(())
+      // (()()))(
+      // ()()()((())
+      // ()()((()
+      // ())(()
+      // ((((()))))
+      // ()()
+      // console.log("-", validParentheses9("()()()("));
+      const t1 = performance.now();
+      console.log(
+        "Call to validParentheses9 took " + (t1 - t0) + " milliseconds."
+      );
+      ///////////////////////////////////////////////////////////////
+
+      // Other solutions
+
+      // oflorent,
+      const tb0 = performance.now();
+      function validParentheses10(parens) {
+        var n = 0;
+        for (var i = 0; i < parens.length; i++) {
+          if (parens[i] == "(") n++;
+          if (parens[i] == ")") n--;
+          if (n < 0) return false;
+        }
+
+        return n == 0;
+      }
+
+      console.log("--", validParentheses10(")))))((((('"));
+      const tb1 = performance.now();
+      console.log(
+        "Call to validParentheses9 took " + (tb1 - tb0) + " milliseconds."
+      );
+
+      function validParentheses11(parens) {
+        var indent = 0;
+
+        for (var i = 0; i < parens.length && indent >= 0; i++) {
+          indent += parens[i] == "(" ? 1 : -1;
+        }
+
+        return indent == 0;
+      }
+
+      function validParentheses12(parens) {
+        var stack = [],
+          i;
+
+        for (i = 0; i < parens.length; i++) {
+          if (parens[i] === "(") {
+            stack.push(parens[i]);
+          } else if ("(" !== stack.pop()) {
+            return false;
+          }
+        }
+
+        return stack.length === 0;
+      }
+
+      function validParentheses13(parens) {
+        while (parens.indexOf("()") != -1) {
+          console.log(parens, parens.indexOf("()"));
+          parens = parens.replace("()", "");
+        }
+        return !parens.length;
+      }
+
+      console.log("13--", validParentheses13("(()())()()()"));
+    </script>
+  </body>
+</html>

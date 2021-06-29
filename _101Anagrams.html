@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <title></title>
+  </head>
+  <body>
+    <script type="text/javascript">
+      const W = "ab";
+      const S = "abxaba";
+
+      const getAnagram = () => {
+        let indexes = [];
+
+        for (let i = 0; i < S.length; i++) {
+          if (S[i] + S[i + 1] == W) {
+            indexes.push(i);
+          } else if (S[i] == W[0] && S[i + 1] != W[1]) {
+            indexes.push(i - 1);
+          }
+          console.log(indexes);
+        }
+        return indexes.join(",");
+      };
+
+      console.log(getAnagram());
+    </script>
+  </body>
+</html>
