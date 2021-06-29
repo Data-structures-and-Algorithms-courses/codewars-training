@@ -7,6 +7,35 @@
   </head>
   <body>
     <script type="text/javascript">
+      /* All parentheses should form a match */
+      // Final solution
+      function validParentheses0(parens) {
+        const arr = [...parens];
+
+        let left = arr.length - 2,
+          right = arr.length - 1;
+        if (arr.length <= 1) return arr.length === 0;
+        if (arr.length % 2 !== 0 || !arr.length) return false;
+        if (arr[0] === ")" || arr[arr.length - 1] === "(") return false;
+
+        for (let i = arr.length; i > 0; i--) {
+          if (arr[left] === "(" && arr[right] === ")") {
+            arr.splice(right, 1);
+            arr.splice(left, 1);
+            return validParentheses0(arr);
+          } else {
+            left--;
+          }
+        }
+
+        return validParentheses0(arr);
+      }
+      console.log(validParentheses0("()()()(")); // false
+      console.log(validParentheses0("((())(()))()")); // true
+
+      /////////////////////////////////////////////////////////////////
+      // Follows attempts and other solutions
+
       // Works fine, but takes too long.
       // Actually, this one finds all the matches.
       // We may return false if we find one dismatch.

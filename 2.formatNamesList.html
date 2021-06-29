@@ -1,11 +1,98 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-</head>
-<body>
-  
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Format Names List</title>
+  </head>
+  <body>
+    <script>
+      /* 
+Given: an array containing hashes of names
+
+Return: a string formatted as a list of names separated by commas except for the last two names, which should be separated by an ampersand.
+
+Example:
+
+list([ {name: 'Bart'}, {name: 'Lisa'}, {name: 'Maggie'} ])
+// returns 'Bart, Lisa & Maggie'
+
+list([ {name: 'Bart'}, {name: 'Lisa'} ])
+// returns 'Bart & Lisa'
+
+list([ {name: 'Bart'} ])
+// returns 'Bart'
+
+list([])
+// returns ''
+
+Sample Tests:
+
+describe("Tests", () => {
+  it("test", () => {
+Test.assertEquals(list([{name: 'Bart'},{name: 'Lisa'},{name: 'Maggie'},{name: 'Homer'},{name: 'Marge'}]), 'Bart, Lisa, Maggie, Homer & Marge',
+"Must work with many names")
+Test.assertEquals(list([{name: 'Bart'},{name: 'Lisa'},{name: 'Maggie'}]), 'Bart, Lisa & Maggie',
+"Must work with many names")
+Test.assertEquals(list([{name: 'Bart'},{name: 'Lisa'}]), 'Bart & Lisa', 
+"Must work with two names")
+Test.assertEquals(list([{name: 'Bart'}]), 'Bart', "Wrong output for a single name")
+Test.assertEquals(list([]), '', "Must work with no names")
+  });
+});
+
+ */
+
+      // Finished in one attempt
+      function list(names) {
+        if (!names.length) return "";
+        if (names.length === 1) return names[0].name;
+
+        const lastTwo =
+          names[names.length - 2].name + " & " + names[names.length - 1].name;
+
+        // console.log(lastTwo);
+
+        const croppedNamesArray = [];
+        const list = names.map((obj, index, array) => {
+          if (index < array.length - 2) {
+            // console.log(obj.name);
+            croppedNamesArray.push(obj.name);
+          }
+        });
+
+        // console.log([...croppedNamesArray, lastTwo].join(", "));
+        return [...croppedNamesArray, lastTwo].join(", ");
+      }
+
+      console.log(
+        list([
+          { name: "Bart" },
+          { name: "Lisa" },
+          // { name: "Maggie" },
+          // { name: "Homer" },
+          // { name: "Marge" },
+        ])
+      ); // 'Bart, Lisa, Maggie, Homer & Marge',
+
+      // Other solutions
+      function list1(names) {
+        return names.reduce(function (prev, current, index, array) {
+          if (index === 0) {
+            return current.name;
+          } else if (index === array.length - 1) {
+            return prev + " & " + current.name;
+          } else {
+            return prev + ", " + current.name;
+          }
+        }, "");
+      }
+
+      function list2(names) {
+        var xs = names.map((p) => p.name);
+        var x = xs.pop();
+        return xs.length ? xs.join(", ") + " & " + x : x || "";
+      }
+    </script>
+  </body>
 </html>
